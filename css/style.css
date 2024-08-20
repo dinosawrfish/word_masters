@@ -9,6 +9,12 @@
     border-bottom: 1px solid black;
 }
 
+.grid-boxes {
+    display: grid;
+    justify-content: center;
+    padding: 50px;
+}
+
 input {
     height: 40px;
     width: 40px;
