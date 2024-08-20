@@ -5,8 +5,7 @@ async function getWordOfDay() {
     const processedResponse = await promise.json();
     const wordOfDay = processedResponse.word;
 
-    console.log(processedResponse);
-    console.log(wordOfDay);
+    return wordOfDay;
 }
 
 function init() {
