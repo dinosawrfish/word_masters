@@ -8,3 +8,16 @@
     justify-content: center;
     border-bottom: 1px solid black;
 }
+
+.grid-boxes {
+    display: grid;
+    justify-content: center;
+    padding: 50px;
+}
+
+input {
+    height: 40px;
+    width: 40px;
+    margin: 5px;
+    border: 3px solid rgb(201, 196, 196);
+}
