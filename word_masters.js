@@ -6,8 +6,12 @@ async function getWordOfDay() {
     return processedResponse.word;
 }
 
-function setFocus() {
-    document.querySelector("input").focus();
+function setFocus(event) {
+    event.focus();
+}
+
+function playGame(event) {
+
 }
 
 function isLetter(letter) {
@@ -18,15 +22,16 @@ async function init() {
     // TODO: get word of the day when page loads
     const wordOfDay = await getWordOfDay()
 
-    window.onload = setFocus()
+    window.onload = setFocus(document.querySelector("input"))
 
     document
-        .querySelector("input")
+        .querySelector(".app")
         .addEventListener("keydown", function(event)
     {
-
         if (!isLetter(event.key)) {
             event.preventDefault();
+        } else {
+            playGame(event);
         }
     });
 
