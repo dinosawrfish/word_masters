@@ -10,8 +10,28 @@ function setFocus(event) {
     event.focus();
 }
 
-function playGame(event) {
+function guessAWord(inputs) {
+    console.log('guess a word')
+    console.log(inputs);
+    inputs.forEach(function(input) {
+        input.addEventListener("keydown", function(event) {
+            if (!isLetter(event.key)) {
+                event.preventDefault();
+            } else if (input.value.length === 1) {
+                console.log('refocus')
+                input.nextElementSibling.focus();
+            }
+        });
+    });
+}
 
+function playGame() {
+    inputRows = document.querySelectorAll(".row");
+
+    inputRows.forEach(function(row) {
+        inputs = row.querySelectorAll(".col");
+        guessAWord(inputs);
+    });
 }
 
 function isLetter(letter) {
@@ -24,16 +44,7 @@ async function init() {
 
     window.onload = setFocus(document.querySelector("input"))
 
-    document
-        .querySelector(".app")
-        .addEventListener("keydown", function(event)
-    {
-        if (!isLetter(event.key)) {
-            event.preventDefault();
-        } else {
-            playGame(event);
-        }
-    });
+    playGame()
 
 }
 
