@@ -10,28 +10,10 @@ function setFocus(event) {
     event.focus();
 }
 
-function guessAWord(inputs) {
-    console.log('guess a word')
-    console.log(inputs);
-    inputs.forEach(function(input) {
-        input.addEventListener("keydown", function(event) {
-            if (!isLetter(event.key)) {
-                event.preventDefault();
-            } else if (input.value.length === 1) {
-                console.log('refocus')
-                input.nextElementSibling.focus();
-            }
-        });
-    });
-}
-
-function playGame() {
-    inputRows = document.querySelectorAll(".row");
-
-    inputRows.forEach(function(row) {
-        inputs = row.querySelectorAll(".col");
-        guessAWord(inputs);
-    });
+function boxKeyed(key) {
+    // handle backspace
+    // handle enter
+    // handle character
 }
 
 function isLetter(letter) {
@@ -42,9 +24,12 @@ async function init() {
     // TODO: get word of the day when page loads
     const wordOfDay = await getWordOfDay()
 
-    window.onload = setFocus(document.querySelector("input"))
+    window.onload = setFocus(document.querySelector("input"));
 
-    playGame()
+    const grid = document.querySelector(".grid-boxes");
+    grid.addEventListener("keydown", function(event) {
+        boxKeyed(event.key);
+    })
 
 }
 
