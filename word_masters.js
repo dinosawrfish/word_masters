@@ -6,9 +6,29 @@ async function getWordOfDay() {
     return processedResponse.word;
 }
 
+function setFocus() {
+    document.querySelector("input").focus();
+}
+
+function isLetter(letter) {
+    return /^[a-zA-Z]$/.test(letter);
+}
+
 async function init() {
     // TODO: get word of the day when page loads
     const wordOfDay = await getWordOfDay()
+
+    window.onload = setFocus()
+
+    document
+        .querySelector("input")
+        .addEventListener("keydown", function(event)
+    {
+
+        if (!isLetter(event.key)) {
+            event.preventDefault();
+        }
+    });
 
 }
 
