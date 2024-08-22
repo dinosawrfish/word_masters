@@ -23,7 +23,7 @@ function focusNextInput(event) {
     let target = event.target;
     console.log('focused', target);
     if (target.value.length === target.maxLength) {
-        target.nextElementSibling.focus()
+        target.nextElementSibling.focus();
     }
 }
 
