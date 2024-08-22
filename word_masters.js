@@ -1,4 +1,5 @@
 const WORD_OF_DAY_URL = "https://words.dev-apis.com/word-of-the-day";
+rows = document.querySelectorAll(".row");
 
 async function getWordOfDay() {
     const promise = await fetch(WORD_OF_DAY_URL);
@@ -18,12 +19,21 @@ function handleEnter() {
 
 }
 
-function handleLetter() {
+function focusNextInput(event) {
+    let target = event.target;
+    console.log('focused', target);
+    if (target.value.length === target.maxLength) {
+        target.nextElementSibling.focus()
+    }
+}
 
+function handleLetter(event) {
+    console.log("handling letter");
+    focusNextInput(event);
 }
 
 function boxKeyed(event) {
-    const key = event.key;
+    let key = event.key;
     // handle backspace
     if (key === "backspace") {
         handleBackspace();
@@ -32,7 +42,8 @@ function boxKeyed(event) {
     } else if (!isLetter(key)) {
         event.preventDefault();
     } else {
-        handleLetter(key);
+        console.log("handle letter", key)
+        handleLetter(event);
     }
     }
 
