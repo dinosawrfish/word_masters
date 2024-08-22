@@ -10,11 +10,31 @@ function setFocus(event) {
     event.focus();
 }
 
-function boxKeyed(key) {
-    // handle backspace
-    // handle enter
-    // handle character
+function handleBackspace() {
+
 }
+
+function handleEnter() {
+
+}
+
+function handleLetter() {
+
+}
+
+function boxKeyed(event) {
+    const key = event.key;
+    // handle backspace
+    if (key === "backspace") {
+        handleBackspace();
+    } else if (key === "enter") {
+        handleEnter();
+    } else if (!isLetter(key)) {
+        event.preventDefault();
+    } else {
+        handleLetter(key);
+    }
+    }
 
 function isLetter(letter) {
     return /^[a-zA-Z]$/.test(letter);
@@ -28,7 +48,7 @@ async function init() {
 
     const grid = document.querySelector(".grid-boxes");
     grid.addEventListener("keydown", function(event) {
-        boxKeyed(event.key);
+        boxKeyed(event);
     })
 
 }
