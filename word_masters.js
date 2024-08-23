@@ -11,8 +11,10 @@ function setFocus(event) {
     event.focus();
 }
 
-function handleBackspace() {
-
+function handleBackspace(event) {
+    console.log('handing backspace');
+    event.target.value = '';
+    event.target.previousElementSibling.focus();
 }
 
 function handleEnter() {
@@ -20,23 +22,24 @@ function handleEnter() {
 }
 
 function focusNextInput(event) {
-    let target = event.target;
-    console.log('focused', target);
-    if (target.value.length === target.maxLength) {
-        target.nextElementSibling.focus();
+    if (event.target.value.length === event.target.maxLength) {
+        console.log('refocus');
+        event.target.nextElementSibling.focus();
     }
 }
 
 function handleLetter(event) {
     console.log("handling letter");
-    focusNextInput(event);
 }
 
 function boxKeyed(event) {
     let key = event.key;
+    console.log('focused', event.target);
     // handle backspace
-    if (key === "backspace") {
-        handleBackspace();
+    if (key === "Backspace") {
+        handleBackspace(event);
+        event.preventDefault();
+        return;
     } else if (key === "enter") {
         handleEnter();
     } else if (!isLetter(key)) {
@@ -44,8 +47,9 @@ function boxKeyed(event) {
     } else {
         console.log("handle letter", key)
         handleLetter(event);
+        focusNextInput(event);
     }
-    }
+}
 
 function isLetter(letter) {
     return /^[a-zA-Z]$/.test(letter);
@@ -55,7 +59,8 @@ async function init() {
     // TODO: get word of the day when page loads
     const wordOfDay = await getWordOfDay()
 
-    window.onload = setFocus(document.querySelector("input"));
+    const firstInput = document.querySelector("input");
+    setFocus(firstInput);
 
     const grid = document.querySelector(".grid-boxes");
     grid.addEventListener("keydown", function(event) {
