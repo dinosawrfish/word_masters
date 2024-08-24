@@ -14,7 +14,10 @@ function setFocus(event) {
 function handleBackspace(event) {
     console.log('handing backspace');
     event.target.value = '';
-    event.target.previousElementSibling.focus();
+    const previousInput = event.target.previousElementSibling;
+    if (previousInput) {
+        event.target.previousElementSibling.focus();
+    }
 }
 
 function handleEnter() {
