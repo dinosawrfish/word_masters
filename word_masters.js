@@ -33,6 +33,10 @@ function focusNextInput(event) {
 
 function handleLetter(event) {
     console.log("handling letter");
+    let nextInput = event.target.nextElementSibling;
+    if (!nextInput) {
+        event.target.value = '';
+    }
 }
 
 function boxKeyed(event) {
