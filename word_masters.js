@@ -16,8 +16,26 @@ function handleBackspace(event) {
     }
 }
 
-function handleEnter() {
+function handleEnter(event) {
     console.log('handling enter');
+    console.log('enter event', event);
+
+    const currentRow = event.target.parentElement;
+    console.log('currentRow', currentRow);
+    const currentInput = event.target;
+
+    if (currentInput === currentRow.lastElementChild) {
+        const nextRow = currentRow.nextElementSibling;
+        console.log('next row', nextRow);
+        if (!nextRow) {
+            gameOver();
+        } else {
+            const newRowFirstInput = nextRow.firstElementChild;
+            console.log('new input', newRowFirstInput);
+            newRowFirstInput.focus();
+        }
+    }
+
 }
 
 function handleLetter(event) {
@@ -35,13 +53,13 @@ function handleLetter(event) {
 function boxKeyed(event) {
     let key = event.key;
     console.log('focused', event.target);
-    // handle backspace
+
     if (key === "Backspace") {
         handleBackspace(event);
         event.preventDefault();
         return;
     } else if (key === "Enter") {
-        handleEnter();
+        handleEnter(event);
     } else if (!isLetter(key)) {
         event.preventDefault();
     } else {
