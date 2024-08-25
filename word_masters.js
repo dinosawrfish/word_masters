@@ -1,5 +1,5 @@
 const WORD_OF_DAY_URL = "https://words.dev-apis.com/word-of-the-day";
-const VALIDATE_WORD_URL = ""
+const VALIDATE_WORD_URL = "https://words.dev-apis.com/validate-word";
 rows = document.querySelectorAll(".row");
 
 async function getWordOfDay() {
@@ -28,8 +28,23 @@ function getWordInRow(row) {
     return word;
 }
 
-function validateGuess(word) {
+async function validateIsWord(word) {
+    const postRequest = {
+        method: "POST",
+        body: JSON.stringify({
+            "word": word
+        })
+    };
+    const promise = await fetch(VALIDATE_WORD_URL, postRequest);
+    const processedResponse = await promise.json();
+    console.log(processedResponse);
+    const isWord = processedResponse.validWord;
+    console.log(isWord);
 
+    if (isWord) {
+        console.log('validate guess');
+        validateIsGuess(word);
+    }
 }
 
 function handleEnter(event) {
@@ -42,7 +57,8 @@ function handleEnter(event) {
 
     if (currentInput === currentRow.lastElementChild) {
         const wordGuessed = getWordInRow(currentRow);
-        validateGuess(wordGuessed);
+        validateIsWord(wordGuessed);
+
         const nextRow = currentRow.nextElementSibling;
         console.log('next row', nextRow);
 
