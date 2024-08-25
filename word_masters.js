@@ -7,10 +7,6 @@ async function getWordOfDay() {
     return processedResponse.word;
 }
 
-function setFocus(event) {
-    event.focus();
-}
-
 function handleBackspace(event) {
     console.log('handing backspace');
     event.target.value = '';
@@ -24,18 +20,15 @@ function handleEnter() {
 
 }
 
-function focusNextInput(event) {
-    if (event.target.value.length === event.target.maxLength) {
-        console.log('refocus');
-        event.target.nextElementSibling.focus();
-    }
-}
-
 function handleLetter(event) {
     console.log("handling letter");
     let nextInput = event.target.nextElementSibling;
     if (!nextInput) {
+        console.log('no next');
         event.target.value = '';
+    } else if (event.target.value.length === event.target.maxLength) {
+        console.log('move to next');
+        nextInput.focus();
     }
 }
 
@@ -54,7 +47,6 @@ function boxKeyed(event) {
     } else {
         console.log("handle letter", key)
         handleLetter(event);
-        focusNextInput(event);
     }
 }
 
@@ -67,7 +59,9 @@ async function init() {
     const wordOfDay = await getWordOfDay()
 
     const firstInput = document.querySelector("input");
-    setFocus(firstInput);
+    console.log(firstInput);
+    firstInput.focus();
+    //setFocus(firstInput);
 
     const grid = document.querySelector(".grid-boxes");
     grid.addEventListener("keydown", function(event) {
