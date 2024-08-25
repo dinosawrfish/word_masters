@@ -1,4 +1,5 @@
 const WORD_OF_DAY_URL = "https://words.dev-apis.com/word-of-the-day";
+const VALIDATE_WORD_URL = ""
 rows = document.querySelectorAll(".row");
 
 async function getWordOfDay() {
@@ -16,6 +17,21 @@ function handleBackspace(event) {
     }
 }
 
+function getWordInRow(row) {
+    let word = '';
+
+    for (i = 0; i < row.childElementCount; i++) {
+        let letter = row.children[i].value;
+        word += letter
+    }
+    console.log('word guessed', word);
+    return word;
+}
+
+function validateGuess(word) {
+
+}
+
 function handleEnter(event) {
     console.log('handling enter');
     console.log('enter event', event);
@@ -25,7 +41,8 @@ function handleEnter(event) {
     const currentInput = event.target;
 
     if (currentInput === currentRow.lastElementChild) {
-        validateGuess();
+        const wordGuessed = getWordInRow(currentRow);
+        validateGuess(wordGuessed);
         const nextRow = currentRow.nextElementSibling;
         console.log('next row', nextRow);
 
