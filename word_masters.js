@@ -25,8 +25,10 @@ function handleEnter(event) {
     const currentInput = event.target;
 
     if (currentInput === currentRow.lastElementChild) {
+        validateGuess();
         const nextRow = currentRow.nextElementSibling;
         console.log('next row', nextRow);
+
         if (!nextRow) {
             gameOver();
         } else {
