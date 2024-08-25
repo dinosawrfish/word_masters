@@ -28,7 +28,17 @@ function getWordInRow(row) {
     return word;
 }
 
-async function validateIsWord(word) {
+function rejectGuess(row) {
+    const inputsToHighlight = row.querySelectorAll("input");
+    console.log("highlight", inputsToHighlight);
+    for (i = 0; i < inputsToHighlight.length; i++) {
+        let input = inputsToHighlight[i];
+        input.style.border = "3px solid red";
+        setTimeout(function () {input.style.border = "3px solid rgb(201, 196, 196)"}, 500);
+    }
+}
+
+async function validateIsWord(word, row) {
     const postRequest = {
         method: "POST",
         body: JSON.stringify({
@@ -44,6 +54,8 @@ async function validateIsWord(word) {
     if (isWord) {
         console.log('validate guess');
         validateIsGuess(word);
+    } else {
+        rejectGuess(row);
     }
 }
 
@@ -57,7 +69,7 @@ function handleEnter(event) {
 
     if (currentInput === currentRow.lastElementChild) {
         const wordGuessed = getWordInRow(currentRow);
-        validateIsWord(wordGuessed);
+        validateIsWord(wordGuessed, currentRow);
 
         const nextRow = currentRow.nextElementSibling;
         console.log('next row', nextRow);
