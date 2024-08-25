@@ -17,7 +17,7 @@ function handleBackspace(event) {
 }
 
 function handleEnter() {
-
+    console.log('handling enter');
 }
 
 function handleLetter(event) {
@@ -40,7 +40,7 @@ function boxKeyed(event) {
         handleBackspace(event);
         event.preventDefault();
         return;
-    } else if (key === "enter") {
+    } else if (key === "Enter") {
         handleEnter();
     } else if (!isLetter(key)) {
         event.preventDefault();
