@@ -41,9 +41,12 @@ function colorInputs(wordOfDay, wordOfDayCount, row) {
             input.style.backgroundColor = "green";
             wordOfDayCount[letter]--;
         } else if (wordOfDayCount[letter] > 0) {
-            input.style.backgroundColor = "yellow";
+            input.style.backgroundColor = "orange";
             wordOfDayCount[letter]--;
+        } else {
+            input.style.backgroundColor = "grey";
         }
+        input.style.color = "white";
     }
 }
 
