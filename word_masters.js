@@ -28,6 +28,39 @@ function getWordInRow(row) {
     return word;
 }
 
+function rainbowfyHeader() {
+
+}
+
+function colorInputs(word, wordOfDay, wordOfDayCount) {
+
+}
+
+function getCharCounts(word) {
+    let charCounter = {};
+
+    for (let i = 0; i < word.length; i++) {
+        if (charCounter[word[i]]) {
+            charCounter[word[i]]++;
+        } else {
+            charCounter[word[i]] = 1;
+        }
+    }
+    return charCounter;
+}
+
+function validateGuess(word, wordOfDay, row) {
+    console.log("word of day", wordOfDay);
+    if (word === wordOfDay) {
+        alert("You win!")
+        document.activeElement.blur();
+        rainbowfyHeader();
+    }
+    wordOfDayCount = getCharCounts(wordOfDay);
+    console.log(wordOfDayCount);
+    colorInputs(word, wordOfDay, wordOfDayCount);
+}
+
 function rejectGuess(row) {
     const inputsToHighlight = row.querySelectorAll("input");
     console.log("highlight", inputsToHighlight);
@@ -38,7 +71,7 @@ function rejectGuess(row) {
     }
 }
 
-async function validateIsWord(word, row) {
+async function validateIsWord(word, row, wordOfDay) {
     const postRequest = {
         method: "POST",
         body: JSON.stringify({
@@ -53,13 +86,13 @@ async function validateIsWord(word, row) {
 
     if (isWord) {
         console.log('validate guess');
-        validateIsGuess(word);
+        validateGuess(word, wordOfDay, row);
     } else {
         rejectGuess(row);
     }
 }
 
-function handleEnter(event) {
+function handleEnter(event, wordOfDay) {
     console.log('handling enter');
     console.log('enter event', event);
 
@@ -69,7 +102,7 @@ function handleEnter(event) {
 
     if (currentInput === currentRow.lastElementChild) {
         const wordGuessed = getWordInRow(currentRow);
-        validateIsWord(wordGuessed, currentRow);
+        validateIsWord(wordGuessed, currentRow, wordOfDay);
 
         const nextRow = currentRow.nextElementSibling;
         console.log('next row', nextRow);
@@ -97,7 +130,7 @@ function handleLetter(event) {
     }
 }
 
-function boxKeyed(event) {
+function boxKeyed(event, wordOfDay) {
     let key = event.key;
     console.log('focused', event.target);
 
@@ -106,7 +139,7 @@ function boxKeyed(event) {
         event.preventDefault();
         return;
     } else if (key === "Enter") {
-        handleEnter(event);
+        handleEnter(event, wordOfDay);
     } else if (!isLetter(key)) {
         event.preventDefault();
     } else {
@@ -130,7 +163,7 @@ async function init() {
 
     const grid = document.querySelector(".grid-boxes");
     grid.addEventListener("keydown", function(event) {
-        boxKeyed(event);
+        boxKeyed(event, wordOfDay);
     })
 
 }
