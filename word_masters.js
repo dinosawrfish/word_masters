@@ -32,8 +32,19 @@ function rainbowfyHeader() {
 
 }
 
-function colorInputs(word, wordOfDay, wordOfDayCount) {
+function colorInputs(wordOfDay, wordOfDayCount, row) {
+    for (let i = 0; i < 5; i++) {
+        let input = row.children[i];
+        let letter = input.value;
 
+        if (letter === wordOfDay[i]) {
+            input.style.backgroundColor = "green";
+            wordOfDayCount[letter]--;
+        } else if (wordOfDayCount[letter] > 0) {
+            input.style.backgroundColor = "yellow";
+            wordOfDayCount[letter]--;
+        }
+    }
 }
 
 function getCharCounts(word) {
@@ -58,7 +69,7 @@ function validateGuess(word, wordOfDay, row) {
     }
     wordOfDayCount = getCharCounts(wordOfDay);
     console.log(wordOfDayCount);
-    colorInputs(word, wordOfDay, wordOfDayCount);
+    colorInputs(wordOfDay, wordOfDayCount, row);
 }
 
 function rejectGuess(row) {
