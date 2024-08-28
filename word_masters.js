@@ -65,14 +65,12 @@ function getCharCounts(word) {
 
 function validateGuess(word, wordOfDay, row) {
     console.log("word of day", wordOfDay);
-    if (word === wordOfDay) {
-        alert("You win!")
-        document.activeElement.blur();
-        rainbowfyHeader();
-    }
+
     wordOfDayCount = getCharCounts(wordOfDay);
     console.log(wordOfDayCount);
     colorInputs(wordOfDay, wordOfDayCount, row);
+
+    return word === wordOfDay
 }
 
 function rejectGuess(row) {
@@ -100,7 +98,24 @@ async function validateIsWord(word, row, wordOfDay) {
 
     if (isWord) {
         console.log('validate guess');
-        validateGuess(word, wordOfDay, row);
+        const isGuess = validateGuess(word, wordOfDay, row);
+        if (isGuess) {
+            alert("You win!")
+            document.activeElement.blur();
+            rainbowfyHeader();
+        } else {
+            const nextRow = row.nextElementSibling;
+            console.log('next row', nextRow);
+
+            if (!nextRow) {
+                gameOver();
+            } else {
+                const newRowFirstInput = nextRow.firstElementChild;
+                console.log('new input', newRowFirstInput);
+                newRowFirstInput.focus();
+            }
+        }
+
     } else {
         rejectGuess(row);
     }
@@ -117,17 +132,6 @@ function handleEnter(event, wordOfDay) {
     if (currentInput === currentRow.lastElementChild) {
         const wordGuessed = getWordInRow(currentRow);
         validateIsWord(wordGuessed, currentRow, wordOfDay);
-
-        const nextRow = currentRow.nextElementSibling;
-        console.log('next row', nextRow);
-
-        if (!nextRow) {
-            gameOver();
-        } else {
-            const newRowFirstInput = nextRow.firstElementChild;
-            console.log('new input', newRowFirstInput);
-            newRowFirstInput.focus();
-        }
     }
 
 }
