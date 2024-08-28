@@ -1,4 +1,5 @@
 const WORD_OF_DAY_URL = "https://words.dev-apis.com/word-of-the-day";
+const VALIDATE_WORD_URL = "https://words.dev-apis.com/validate-word";
 rows = document.querySelectorAll(".row");
 
 async function getWordOfDay() {
@@ -16,6 +17,48 @@ function handleBackspace(event) {
     }
 }
 
+function getWordInRow(row) {
+    let word = '';
+
+    for (i = 0; i < row.childElementCount; i++) {
+        let letter = row.children[i].value;
+        word += letter
+    }
+    console.log('word guessed', word);
+    return word;
+}
+
+function rejectGuess(row) {
+    const inputsToHighlight = row.querySelectorAll("input");
+    console.log("highlight", inputsToHighlight);
+    for (i = 0; i < inputsToHighlight.length; i++) {
+        let input = inputsToHighlight[i];
+        input.style.border = "3px solid red";
+        setTimeout(function () {input.style.border = "3px solid rgb(201, 196, 196)"}, 500);
+    }
+}
+
+async function validateIsWord(word, row) {
+    const postRequest = {
+        method: "POST",
+        body: JSON.stringify({
+            "word": word
+        })
+    };
+    const promise = await fetch(VALIDATE_WORD_URL, postRequest);
+    const processedResponse = await promise.json();
+    console.log(processedResponse);
+    const isWord = processedResponse.validWord;
+    console.log(isWord);
+
+    if (isWord) {
+        console.log('validate guess');
+        validateIsGuess(word);
+    } else {
+        rejectGuess(row);
+    }
+}
+
 function handleEnter(event) {
     console.log('handling enter');
     console.log('enter event', event);
@@ -25,7 +68,9 @@ function handleEnter(event) {
     const currentInput = event.target;
 
     if (currentInput === currentRow.lastElementChild) {
-        validateGuess();
+        const wordGuessed = getWordInRow(currentRow);
+        validateIsWord(wordGuessed, currentRow);
+
         const nextRow = currentRow.nextElementSibling;
         console.log('next row', nextRow);
 
