@@ -29,7 +29,8 @@ function getWordInRow(row) {
 }
 
 function rainbowfyHeader() {
-
+    const header = document.querySelector(".header");
+    header.classList.add("rainbow");
 }
 
 function colorInputs(wordOfDay, wordOfDayCount, row) {
