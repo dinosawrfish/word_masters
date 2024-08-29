@@ -74,6 +74,11 @@ function validateGuess(word, wordOfDay, row) {
     return word === wordOfDay
 }
 
+function gameOver(wordOfDay) {
+    alert(`You lose, the word was ${wordOfDay.toUpperCase()}`);
+    document.activeElement.blur();
+}
+
 function rejectGuess(row) {
     const inputsToHighlight = row.querySelectorAll("input");
     console.log("highlight", inputsToHighlight);
@@ -109,7 +114,8 @@ async function validateIsWord(word, row, wordOfDay) {
             console.log('next row', nextRow);
 
             if (!nextRow) {
-                gameOver();
+                console.log('game over word was', wordOfDay);
+                gameOver(wordOfDay);
             } else {
                 const newRowFirstInput = nextRow.firstElementChild;
                 console.log('new input', newRowFirstInput);
