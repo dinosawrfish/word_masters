@@ -181,6 +181,12 @@ async function init() {
     // TODO: get word of the day when page loads
     const wordOfDay = await getWordOfDay()
 
+    document.addEventListener("mousedown", function(event) {
+        console.log('i heard a click');
+        event.stopPropagation();
+        event.preventDefault();
+    })
+
     const firstInput = document.querySelector("input");
     console.log(firstInput);
     firstInput.focus();
