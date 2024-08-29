@@ -1,6 +1,5 @@
 const WORD_OF_DAY_URL = "https://words.dev-apis.com/word-of-the-day";
 const VALIDATE_WORD_URL = "https://words.dev-apis.com/validate-word";
-rows = document.querySelectorAll(".row");
 
 async function getWordOfDay() {
     const promise = await fetch(WORD_OF_DAY_URL);
@@ -9,7 +8,6 @@ async function getWordOfDay() {
 }
 
 function handleBackspace(event) {
-    console.log('handing backspace');
     event.target.value = '';
     const previousInput = event.target.previousElementSibling;
     if (previousInput) {
@@ -24,7 +22,7 @@ function getWordInRow(row) {
         let letter = row.children[i].value;
         word += letter
     }
-    console.log('word guessed', word);
+
     return word;
 }
 
@@ -65,10 +63,7 @@ function getCharCounts(word) {
 }
 
 function validateGuess(word, wordOfDay, row) {
-    console.log("word of day", wordOfDay);
-
     wordOfDayCount = getCharCounts(wordOfDay);
-    console.log(wordOfDayCount);
     colorInputs(wordOfDay, wordOfDayCount, row);
 
     return word === wordOfDay
@@ -81,7 +76,6 @@ function gameOver(wordOfDay) {
 
 function rejectGuess(row) {
     const inputsToHighlight = row.querySelectorAll("input");
-    console.log("highlight", inputsToHighlight);
     for (i = 0; i < inputsToHighlight.length; i++) {
         let input = inputsToHighlight[i];
         input.style.border = "3px solid red";
@@ -98,12 +92,9 @@ async function validateIsWord(word, row, wordOfDay) {
     };
     const promise = await fetch(VALIDATE_WORD_URL, postRequest);
     const processedResponse = await promise.json();
-    console.log(processedResponse);
     const isWord = processedResponse.validWord;
-    console.log(isWord);
 
     if (isWord) {
-        console.log('validate guess');
         const isGuess = validateGuess(word, wordOfDay, row);
         if (isGuess) {
             alert("You win!")
@@ -111,14 +102,11 @@ async function validateIsWord(word, row, wordOfDay) {
             rainbowfyHeader();
         } else {
             const nextRow = row.nextElementSibling;
-            console.log('next row', nextRow);
 
             if (!nextRow) {
-                console.log('game over word was', wordOfDay);
                 gameOver(wordOfDay);
             } else {
                 const newRowFirstInput = nextRow.firstElementChild;
-                console.log('new input', newRowFirstInput);
                 newRowFirstInput.focus();
             }
         }
@@ -129,11 +117,7 @@ async function validateIsWord(word, row, wordOfDay) {
 }
 
 function handleEnter(event, wordOfDay) {
-    console.log('handling enter');
-    console.log('enter event', event);
-
     const currentRow = event.target.parentElement;
-    console.log('currentRow', currentRow);
     const currentInput = event.target;
 
     if (currentInput === currentRow.lastElementChild) {
@@ -144,20 +128,16 @@ function handleEnter(event, wordOfDay) {
 }
 
 function handleLetter(event) {
-    console.log("handling letter");
     let nextInput = event.target.nextElementSibling;
     if (!nextInput) {
-        console.log('no next');
         event.target.value = '';
     } else if (event.target.value.length === event.target.maxLength) {
-        console.log('move to next');
         nextInput.focus();
     }
 }
 
 function boxKeyed(event, wordOfDay) {
     let key = event.key;
-    console.log('focused', event.target);
 
     if (key === "Backspace") {
         handleBackspace(event);
@@ -168,7 +148,6 @@ function boxKeyed(event, wordOfDay) {
     } else if (!isLetter(key)) {
         event.preventDefault();
     } else {
-        console.log("handle letter", key)
         handleLetter(event);
     }
 }
@@ -178,13 +157,15 @@ function isLetter(letter) {
 }
 
 async function init() {
-    // TODO: get word of the day when page loads
     const wordOfDay = await getWordOfDay()
 
+    document.addEventListener("mousedown", function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+    })
+
     const firstInput = document.querySelector("input");
-    console.log(firstInput);
     firstInput.focus();
-    //setFocus(firstInput);
 
     const grid = document.querySelector(".grid-boxes");
     grid.addEventListener("keydown", function(event) {
