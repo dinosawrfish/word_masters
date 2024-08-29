@@ -1,9 +1,18 @@
 const WORD_OF_DAY_URL = "https://words.dev-apis.com/word-of-the-day";
 const VALIDATE_WORD_URL = "https://words.dev-apis.com/validate-word";
+const loadingDiv = document.querySelector(".info-bar");
+
+function setLoading(isLoading) {
+    loadingDiv.classList.toggle("hidden", !isLoading);
+}
 
 async function getWordOfDay() {
+    isLoading = true;
+    setLoading(isLoading);
     const promise = await fetch(WORD_OF_DAY_URL);
     const processedResponse = await promise.json();
+    isLoading = false;
+    setLoading(isLoading);
     return processedResponse.word;
 }
 
@@ -84,6 +93,8 @@ function rejectGuess(row) {
 }
 
 async function validateIsWord(word, row, wordOfDay) {
+    let isLoading = true;
+    setLoading(isLoading);
     const postRequest = {
         method: "POST",
         body: JSON.stringify({
@@ -93,6 +104,8 @@ async function validateIsWord(word, row, wordOfDay) {
     const promise = await fetch(VALIDATE_WORD_URL, postRequest);
     const processedResponse = await promise.json();
     const isWord = processedResponse.validWord;
+    isLoading = false;
+    setLoading(isLoading);
 
     if (isWord) {
         const isGuess = validateGuess(word, wordOfDay, row);
