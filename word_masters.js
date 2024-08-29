@@ -28,6 +28,52 @@ function getWordInRow(row) {
     return word;
 }
 
+function rainbowfyHeader() {
+    const header = document.querySelector(".header");
+    header.classList.add("rainbow");
+}
+
+function colorInputs(wordOfDay, wordOfDayCount, row) {
+    for (let i = 0; i < 5; i++) {
+        let input = row.children[i];
+        let letter = input.value;
+
+        if (letter === wordOfDay[i]) {
+            input.style.backgroundColor = "green";
+            wordOfDayCount[letter]--;
+        } else if (wordOfDayCount[letter] > 0) {
+            input.style.backgroundColor = "orange";
+            wordOfDayCount[letter]--;
+        } else {
+            input.style.backgroundColor = "grey";
+        }
+        input.style.color = "white";
+    }
+}
+
+function getCharCounts(word) {
+    let charCounter = {};
+
+    for (let i = 0; i < word.length; i++) {
+        if (charCounter[word[i]]) {
+            charCounter[word[i]]++;
+        } else {
+            charCounter[word[i]] = 1;
+        }
+    }
+    return charCounter;
+}
+
+function validateGuess(word, wordOfDay, row) {
+    console.log("word of day", wordOfDay);
+
+    wordOfDayCount = getCharCounts(wordOfDay);
+    console.log(wordOfDayCount);
+    colorInputs(wordOfDay, wordOfDayCount, row);
+
+    return word === wordOfDay
+}
+
 function rejectGuess(row) {
     const inputsToHighlight = row.querySelectorAll("input");
     console.log("highlight", inputsToHighlight);
@@ -38,7 +84,7 @@ function rejectGuess(row) {
     }
 }
 
-async function validateIsWord(word, row) {
+async function validateIsWord(word, row, wordOfDay) {
     const postRequest = {
         method: "POST",
         body: JSON.stringify({
@@ -53,13 +99,30 @@ async function validateIsWord(word, row) {
 
     if (isWord) {
         console.log('validate guess');
-        validateIsGuess(word);
+        const isGuess = validateGuess(word, wordOfDay, row);
+        if (isGuess) {
+            alert("You win!")
+            document.activeElement.blur();
+            rainbowfyHeader();
+        } else {
+            const nextRow = row.nextElementSibling;
+            console.log('next row', nextRow);
+
+            if (!nextRow) {
+                gameOver();
+            } else {
+                const newRowFirstInput = nextRow.firstElementChild;
+                console.log('new input', newRowFirstInput);
+                newRowFirstInput.focus();
+            }
+        }
+
     } else {
         rejectGuess(row);
     }
 }
 
-function handleEnter(event) {
+function handleEnter(event, wordOfDay) {
     console.log('handling enter');
     console.log('enter event', event);
 
@@ -69,18 +132,7 @@ function handleEnter(event) {
 
     if (currentInput === currentRow.lastElementChild) {
         const wordGuessed = getWordInRow(currentRow);
-        validateIsWord(wordGuessed, currentRow);
-
-        const nextRow = currentRow.nextElementSibling;
-        console.log('next row', nextRow);
-
-        if (!nextRow) {
-            gameOver();
-        } else {
-            const newRowFirstInput = nextRow.firstElementChild;
-            console.log('new input', newRowFirstInput);
-            newRowFirstInput.focus();
-        }
+        validateIsWord(wordGuessed, currentRow, wordOfDay);
     }
 
 }
@@ -97,7 +149,7 @@ function handleLetter(event) {
     }
 }
 
-function boxKeyed(event) {
+function boxKeyed(event, wordOfDay) {
     let key = event.key;
     console.log('focused', event.target);
 
@@ -106,7 +158,7 @@ function boxKeyed(event) {
         event.preventDefault();
         return;
     } else if (key === "Enter") {
-        handleEnter(event);
+        handleEnter(event, wordOfDay);
     } else if (!isLetter(key)) {
         event.preventDefault();
     } else {
@@ -130,7 +182,7 @@ async function init() {
 
     const grid = document.querySelector(".grid-boxes");
     grid.addEventListener("keydown", function(event) {
-        boxKeyed(event);
+        boxKeyed(event, wordOfDay);
     })
 
 }
