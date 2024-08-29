@@ -7,7 +7,7 @@ function setLoading(isLoading) {
 }
 
 async function getWordOfDay() {
-    isLoading = true;
+    let isLoading = true;
     setLoading(isLoading);
     const promise = await fetch(WORD_OF_DAY_URL);
     const processedResponse = await promise.json();
