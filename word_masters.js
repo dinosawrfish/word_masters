@@ -44,10 +44,17 @@ function colorInputs(wordOfDay, wordOfDayCount, row) {
     for (let i = 0; i < 5; i++) {
         let input = row.children[i];
         let letter = input.value;
-
         if (letter === wordOfDay[i]) {
             input.style.backgroundColor = "green";
             wordOfDayCount[letter]--;
+        }
+    }
+
+    for (let i = 0; i < 5; i++) {
+        let input = row.children[i];
+        let letter = input.value;
+        if (letter === wordOfDay[i]) {
+            //do nothing
         } else if (wordOfDayCount[letter] > 0) {
             input.style.backgroundColor = "orange";
             wordOfDayCount[letter]--;
